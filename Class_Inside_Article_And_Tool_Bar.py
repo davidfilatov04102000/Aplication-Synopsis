@@ -24,7 +24,7 @@ class InsideArticleAndToolBar:
         self.arg_func_for_delete_tabs = arg_func_for_delete_tabs
         self.func_for_rename_tabs = func_for_rename_tabs
         self.tool_bar_frame = ctk.CTkFrame(master, corner_radius=10, fg_color="#A0A0A4")
-        self.tool_bar_frame.grid(row=0, column=0, padx=5, sticky="w")
+        self.tool_bar_frame.grid(row=0, column=0, padx=5, pady=3, sticky="w")
 
         self.home_btn = ToolBarButton(master=self.tool_bar_frame, name="⬅", font_size=16,
                                       btn_color="#FF4500", command=self.to_menu_chapter)
@@ -74,7 +74,7 @@ class InsideArticleAndToolBar:
         self.text_box.configure(state="disabled")
 
     def to_menu_chapter(self):
-        self.arg_func_home(self.name_chapter, self.id_chapter)
+        self.arg_func_home(self.name_chapter, self.id_chapter, 1)
 
     def scale_up(self):
         self.size_font_for_scale += 1
@@ -122,3 +122,5 @@ class InsideArticleAndToolBar:
                 D_B.close_connect()
                 self.func_for_rename_tabs(value_dialog_window)
                 add_in_logging_last_press(value_dialog_window, self.name_chapter, self.id_chapter, self.id_article)
+
+        self.save_change_in_article()

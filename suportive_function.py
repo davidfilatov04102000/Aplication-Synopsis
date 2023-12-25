@@ -75,3 +75,14 @@ def function_for_offset_down_for_chapter_article(num):
                 column = y
                 break
     return row, column
+
+
+configuration_app_now = []
+
+
+def change_value_configuration_app_now(val):
+    if len(configuration_app_now) != 0:
+        configuration_app_now.clear()
+        configuration_app_now.append(val)
+    else:
+        configuration_app_now.append(val)

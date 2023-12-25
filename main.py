@@ -8,7 +8,7 @@ from Class_Inside_Article_And_Tool_Bar import InsideArticleAndToolBar
 from Class_For_Tabs import TabsAndDoubleButton
 from suportive_function import function_for_offset_down, function_for_offset_down_for_chapter_article, \
      add_in_logging_last_press, record_name_in_lists_open_tabs, read_name_article_for_open_tabs, \
-     delete_tabs_from_lists_open_tabs, delete_all_from_lists_for_open_tabs
+     delete_tabs_from_lists_open_tabs, delete_all_from_lists_for_open_tabs, change_value_configuration_app_now
 
 
 #Переменная которая хранит количество вкладок и используется в качестве аргумента для размещения на фрейме вкладок
@@ -35,6 +35,8 @@ class App(ctk.CTk):
         self.grid_columnconfigure((2, 3), weight=0)
         self.grid_rowconfigure((0, 1, 2), weight=1)
 
+        change_value_configuration_app_now(0)
+
         """Рамка для боковой панели слева"""
         self.art_left = ctk.CTkFrame(self, width=self.width_win - 1070, corner_radius=0)
         self.art_left.grid(row=0, column=0, rowspan=4, sticky="nsew")
@@ -58,7 +60,7 @@ class App(ctk.CTk):
         self.scroll_frame_for_chapter.grid(row=1, column=0)
 
         """Рамка для основного рабочего поля"""
-        self.main_field_frame = ctk.CTkScrollableFrame(self, height=(self.height_win - 95), corner_radius=10)
+        self.main_field_frame = ctk.CTkFrame(self, height=(self.height_win - 95), corner_radius=10)
         self.main_field_frame.grid(row=0, column=1, padx=20, pady=10, sticky="new", rowspan=4)
 
         """Прокручиваемый фрейм для вкладок"""
@@ -149,17 +151,6 @@ class App(ctk.CTk):
                                                     font=("Arial Bold", 12), command=self.delete_time_widget)
         self.time_btn_non.grid(row=1, column=0, padx=40, pady=0, sticky="ne")
 
-    """Функция создает содержимое основной рабочей области"""
-    def distribution_function(self, name_chapter, id_chapter):
-        # цикл удаляющий все содержимое основной рабочей области
-        for widget in self.main_field_frame.winfo_children():
-            widget.destroy()
-        # создание объекта класса содержимого внутри раздела
-        self.small_chapter = InsideChapter(self.main_field_frame, name_chapter, id_chapter,
-                                           self.create_widget_for_create_article, self.delete_chapter)
-        # отрисовка кписка существующих статей
-        self.create_exist_article(name_chapter, id_chapter)
-
     """Функция создает всплывающую рамку с виджетами для создания статьи"""
     def create_widget_for_create_article(self, name_chapter, id_chapter):
         D_B = Connection()
@@ -209,6 +200,7 @@ class App(ctk.CTk):
                                                 name_chapter=name_chapter, id_chapter=id_chapter,
                                                 arg_func_for_delete_tabs=self.delete_tabs_in_time_delete_article,
                                                 func_for_rename_tabs=self.rename_tabs_article)
+        change_value_configuration_app_now(2)
         add_in_logging_last_press(name_article, name_chapter, id_chapter, id_article)
 
     # Функция которая создает содержимое статьи она будет вызываться в create_inside_article()
@@ -221,6 +213,7 @@ class App(ctk.CTk):
                                                 name_chapter=name_chapter, id_chapter=id_chapter,
                                                 arg_func_for_delete_tabs=self.delete_tabs_in_time_delete_article,
                                                 func_for_rename_tabs=self.rename_tabs_article)
+        change_value_configuration_app_now(2)
 
     # Функция которая создает вкладку статьи
     def create_tabs(self, name_article, name_chapter, id_chapter, id_article):
@@ -228,7 +221,8 @@ class App(ctk.CTk):
         self.one_tabs = TabsAndDoubleButton(self.frame_for_tabs, name_article, id_article,
                                             self.create_inside_article_duplicate, name_chapter, id_chapter,
                                             self.create_inside_article_duplicate,
-                                            self.distribution_function)
+                                            self.distribution_function,
+                                            self.info_about_object_article)
         # размещение
         self.one_tabs.grid(row=0, column=count_for_offset_Tabs)
         # функция которая меняет число для отступа вкладки
@@ -302,6 +296,31 @@ class App(ctk.CTk):
                                                               id_article=k, arg_func=self.create_inside_article)
                 self.exist_article.grid(row=values_for_offset[0], column=values_for_offset[1], padx=70, pady=30)
 
+    def info_about_object_article(self):
+        return self.text_box
 
-main_obj = App()
-main_obj.mainloop()
+    """Функция создает содержимое основной рабочей области"""
+
+    def distribution_function(self, name_chapter, id_chapter, save_article=None):
+        from suportive_function import list_open_tabs_for_articles, configuration_app_now
+        if save_article is not None:
+            self.text_box.save_change_in_article()
+        elif len(list_open_tabs_for_articles) != 0:
+            if configuration_app_now[0] == 2:
+                self.text_box.save_change_in_article()
+
+        change_value_configuration_app_now(1)
+
+        # цикл удаляющий все содержимое основной рабочей области
+        for widget in self.main_field_frame.winfo_children():
+            widget.destroy()
+        # создание объекта класса содержимого внутри раздела
+        self.small_chapter = InsideChapter(self.main_field_frame, name_chapter, id_chapter,
+                                           self.create_widget_for_create_article, self.delete_chapter)
+        # отрисовка кписка существующих статей
+        self.create_exist_article(name_chapter, id_chapter)
+
+
+if __name__ == "__main__":
+    main_obj = App()
+    main_obj.mainloop()

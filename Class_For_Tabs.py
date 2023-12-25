@@ -14,7 +14,9 @@ class TabsAndDoubleButton(ctk.CTkFrame):
                  name_chapter: str,
                  id_chapter: int,
                  func_open_new_art: any,
-                 func_open_menu_chapter: any):
+                 func_open_menu_chapter: any,
+                 func_for_save_change_in_article: any,
+                 ):
         super().__init__(master, corner_radius=8)
 
         self.arg_func = arg_func
@@ -24,6 +26,7 @@ class TabsAndDoubleButton(ctk.CTkFrame):
         self.id_chapter = id_chapter
         self.func_open_new_article = func_open_new_art
         self.func_open_menu_chapter = func_open_menu_chapter
+        self.func_for_save_change_in_article = func_for_save_change_in_article
 
         self.button_1 = ctk.CTkButton(self, text=self.name_article, font=("Arial Bold", 11), border_spacing=1,
                                       width=40, height=20, fg_color="#4682B4",
@@ -35,16 +38,24 @@ class TabsAndDoubleButton(ctk.CTkFrame):
         self.button_2.grid(row=0, column=1, sticky="w")
 
     def transition_on_tabs(self):
+        from suportive_function import configuration_app_now
+        # ert = configuration_app_now.copy()
+        # print(configuration_app_now)
+        if configuration_app_now[0] == 2:
+            object_article = self.func_for_save_change_in_article()
+            object_article.save_change_in_article()
         add_in_logging_last_press(self.name_article, self.name_chapter, self.id_chapter, self.id_article)
         self.arg_func(self.name_article, self.name_chapter, self.id_chapter, self.id_article)
         from suportive_function import list_open_tabs_for_articles, list_open_tabs_for_chapters, \
             logging_last_press
-        pprint.pprint(list_open_tabs_for_articles)
-        pprint.pprint(list_open_tabs_for_chapters)
-        print(logging_last_press)
-        print("\n\n")
+        # pprint.pprint(list_open_tabs_for_articles)
+        # pprint.pprint(list_open_tabs_for_chapters)
+        # print(logging_last_press)
+        # print("\n\n")
 
     def delete_tabs(self):
+        object_article = self.func_for_save_change_in_article()
+        object_article.save_change_in_article()
         from suportive_function import logging_last_press
         if logging_last_press[0] != self.name_article:
             self.destroy()
