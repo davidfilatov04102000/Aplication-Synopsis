@@ -61,8 +61,8 @@ class Connection:
                                 (id_article, text_article))
             self.connect.commit()
         else:
-            self.cursor.execute(f"UPDATE names_of_articles_and_their_text SET text_article='{text_article}' "
-                                f"WHERE id_article={id_article}")
+            self.cursor.execute("UPDATE names_of_articles_and_their_text SET text_article= ? WHERE id_article= ?",
+                                (text_article, id_article))
             self.connect.commit()
 
     def create_void_record_for_article(self, id_article):

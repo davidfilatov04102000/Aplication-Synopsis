@@ -54,8 +54,10 @@ class TabsAndDoubleButton(ctk.CTkFrame):
         # print("\n\n")
 
     def delete_tabs(self):
-        object_article = self.func_for_save_change_in_article()
-        object_article.save_change_in_article()
+        from suportive_function import configuration_app_now
+        if configuration_app_now[0] == 2:
+            object_article = self.func_for_save_change_in_article()
+            object_article.save_change_in_article()
         from suportive_function import logging_last_press
         if logging_last_press[0] != self.name_article:
             self.destroy()

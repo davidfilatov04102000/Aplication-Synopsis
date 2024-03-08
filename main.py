@@ -60,7 +60,7 @@ class App(ctk.CTk):
         self.scroll_frame_for_chapter.grid(row=1, column=0)
 
         """Рамка для основного рабочего поля"""
-        self.main_field_frame = ctk.CTkFrame(self, height=(self.height_win - 95), corner_radius=10)
+        self.main_field_frame = ctk.CTkScrollableFrame(self, height=(self.height_win - 95), corner_radius=10)
         self.main_field_frame.grid(row=0, column=1, padx=20, pady=10, sticky="new", rowspan=4)
 
         """Прокручиваемый фрейм для вкладок"""
